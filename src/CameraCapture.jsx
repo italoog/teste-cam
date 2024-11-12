@@ -105,7 +105,7 @@ const CameraCapture = () => {
   };
 
   const buttonStyle = {
-    margin: "0 10px",
+    margin: "5px 10px",
     padding: "12px 24px",
     borderRadius: "25px",
     border: "none",
