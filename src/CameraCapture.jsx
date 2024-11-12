@@ -9,20 +9,16 @@ const CameraCapture = () => {
   const [isSupported, setIsSupported] = useState(true);
 
   useEffect(() => {
-    // Verificação mais completa de suporte
     const checkSupport = async () => {
       try {
-        // Verifica se está rodando em um contexto seguro (HTTPS ou localhost)
         if (!window.isSecureContext) {
           throw new Error("Necessário contexto seguro (HTTPS)");
         }
 
-        // Verifica suporte a mediaDevices
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
           throw new Error("API mediaDevices não suportada");
         }
 
-        // Tenta acessar a câmera
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: "environment",
@@ -33,8 +29,6 @@ const CameraCapture = () => {
 
         setHasPermission(true);
         setIsSupported(true);
-
-        // Limpa o stream após o teste
         stream.getTracks().forEach((track) => track.stop());
       } catch (err) {
         console.error("Erro na verificação:", err);
@@ -78,16 +72,65 @@ const CameraCapture = () => {
     }
   };
 
+  const containerStyle = {
+    maxWidth: "800px",
+    margin: "0 auto",
+    padding: "20px",
+    fontFamily: "Arial, sans-serif",
+    textAlign: "center",
+  };
+
+  const circleContainerStyle = {
+    width: "300px",
+    height: "400px",
+    borderRadius: "50%",
+    overflow: "hidden",
+    margin: "0 auto",
+    position: "relative",
+    border: "4px solid #3498db",
+    boxShadow: "0 0 20px rgba(52, 152, 219, 0.3)",
+    // background: "#000",
+  };
+
+  const mediaStyle = {
+    width: "auto",
+    height: "100%",
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+    transform: "translate(-50%, -50%)",
+    minWidth: "100%",
+    minHeight: "100%",
+    objectFit: "cover",
+  };
+
+  const buttonStyle = {
+    margin: "0 10px",
+    padding: "12px 24px",
+    borderRadius: "25px",
+    border: "none",
+    background: "#3498db",
+    color: "white",
+    fontSize: "16px",
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+  };
+
+  const titleStyle = {
+    color: "#2c3e50",
+    marginBottom: "30px",
+  };
+
   if (!isSupported) {
     return (
-      <div>
-        <h2>Erro de Compatibilidade</h2>
+      <div style={containerStyle}>
+        <h2 style={titleStyle}>Erro de Compatibilidade</h2>
         <p>Seu navegador não suporta acesso à câmera.</p>
         <p>Por favor, tente:</p>
-        <ul>
-          <li>Usar o Google Chrome mais recente</li>
-          <li>Verificar se está usando HTTPS</li>
-          <li>Permitir acesso à câmera nas configurações do navegador</li>
+        <ul style={{ listStyle: "none", padding: 0 }}>
+          <li>• Usar o Google Chrome mais recente</li>
+          <li>• Verificar se está usando HTTPS</li>
+          <li>• Permitir acesso à câmera nas configurações do navegador</li>
         </ul>
       </div>
     );
@@ -95,40 +138,49 @@ const CameraCapture = () => {
 
   if (hasPermission === false) {
     return (
-      <div>Acesso à câmera negado. Verifique as permissões do navegador.</div>
+      <div style={containerStyle}>
+        Acesso à câmera negado. Verifique as permissões do navegador.
+      </div>
     );
   }
 
   return (
-    <div>
-      <h1>Captura de Foto</h1>
-      <Webcam
-        audio={false}
-        ref={webcamRef}
-        screenshotFormat="image/jpeg"
-        videoConstraints={{
-          facingMode: facingMode,
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-        }}
-        style={{ width: "100%", maxWidth: "500px" }}
-        onUserMediaError={(err) => {
-          console.error("Erro na câmera:", err);
-          setIsSupported(false);
-        }}
-      />
-      <div style={{ marginTop: "10px" }}>
-        <button onClick={capture}>Tirar Foto</button>
-        <button onClick={trocarCamera}>Trocar Câmera</button>
+    <div style={containerStyle}>
+      <h1 style={titleStyle}>Captura de Foto</h1>
+
+      <div style={circleContainerStyle}>
+        <Webcam
+          audio={false}
+          ref={webcamRef}
+          screenshotFormat="image/jpeg"
+          videoConstraints={{
+            facingMode: facingMode,
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+          }}
+          style={mediaStyle}
+          onUserMediaError={(err) => {
+            console.error("Erro na câmera:", err);
+            setIsSupported(false);
+          }}
+        />
       </div>
+
+      <div style={{ marginTop: "30px" }}>
+        <button style={buttonStyle} onClick={capture}>
+          📸 Tirar Foto
+        </button>
+        <button style={buttonStyle} onClick={trocarCamera}>
+          🔄 Trocar Câmera
+        </button>
+      </div>
+
       {capturedImage && (
-        <div>
-          <h2>Foto Capturada:</h2>
-          <img
-            src={capturedImage}
-            alt="Foto Capturada"
-            style={{ width: "100%", maxWidth: "500px" }}
-          />
+        <div style={{ marginTop: "40px" }}>
+          <h2 style={titleStyle}>Foto Capturada</h2>
+          <div style={circleContainerStyle}>
+            <img src={capturedImage} alt="Foto Capturada" style={mediaStyle} />
+          </div>
         </div>
       )}
     </div>
