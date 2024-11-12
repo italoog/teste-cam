@@ -192,7 +192,6 @@ const CameraCapture = () => {
     justifyContent: "center",
     alignItems: "center",
     minHeight: "100vh",
-    backgroundColor: "#fff",
   };
 
   const errorMessageStyle = {
