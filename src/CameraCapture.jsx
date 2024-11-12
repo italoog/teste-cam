@@ -1,9 +1,9 @@
-import { useRef, useState, useEffect } from 'react';
-import Webcam from 'react-webcam';
+import { useRef, useState, useEffect } from "react";
+import Webcam from "react-webcam";
 
 const CameraCapture = () => {
   const webcamRef = useRef(null);
-  const [capturedImage, setCapturedImage] = useState('');
+  const [capturedImage, setCapturedImage] = useState("");
   const [facingMode, setFacingMode] = useState("environment");
   const [hasPermission, setHasPermission] = useState(null);
   const [isSupported, setIsSupported] = useState(true);
@@ -23,20 +23,19 @@ const CameraCapture = () => {
         }
 
         // Tenta acessar a câmera
-        const stream = await navigator.mediaDevices.getUserMedia({ 
+        const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            facingMode: 'environment',
+            facingMode: "environment",
             width: { ideal: 1280 },
-            height: { ideal: 720 }
-          }
+            height: { ideal: 720 },
+          },
         });
 
         setHasPermission(true);
         setIsSupported(true);
 
         // Limpa o stream após o teste
-        stream.getTracks().forEach(track => track.stop());
-
+        stream.getTracks().forEach((track) => track.stop());
       } catch (err) {
         console.error("Erro na verificação:", err);
         setIsSupported(false);
@@ -61,12 +60,12 @@ const CameraCapture = () => {
 
   const enviarImagem = async (base64Image) => {
     try {
-      const response = await fetch('https://seu-backend.com/api/upload', {
-        method: 'POST',
+      const response = await fetch("https://seu-backend.com/api/upload", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ image: base64Image })
+        body: JSON.stringify({ image: base64Image }),
       });
 
       if (response.ok) {
@@ -95,7 +94,9 @@ const CameraCapture = () => {
   }
 
   if (hasPermission === false) {
-    return <div>Acesso à câmera negado. Verifique as permissões do navegador.</div>;
+    return (
+      <div>Acesso à câmera negado. Verifique as permissões do navegador.</div>
+    );
   }
 
   return (
@@ -108,22 +109,26 @@ const CameraCapture = () => {
         videoConstraints={{
           facingMode: facingMode,
           width: { ideal: 1280 },
-          height: { ideal: 720 }
+          height: { ideal: 720 },
         }}
-        style={{ width: '100%', maxWidth: '500px' }}
+        style={{ width: "100%", maxWidth: "500px" }}
         onUserMediaError={(err) => {
           console.error("Erro na câmera:", err);
           setIsSupported(false);
         }}
       />
-      <div style={{ marginTop: '10px' }}>
+      <div style={{ marginTop: "10px" }}>
         <button onClick={capture}>Tirar Foto</button>
         <button onClick={trocarCamera}>Trocar Câmera</button>
       </div>
       {capturedImage && (
         <div>
           <h2>Foto Capturada:</h2>
-          <img src={capturedImage} alt="Foto Capturada" style={{ width: '100%', maxWidth: '500px' }} />
+          <img
+            src={capturedImage}
+            alt="Foto Capturada"
+            style={{ width: "100%", maxWidth: "500px" }}
+          />
         </div>
       )}
     </div>
