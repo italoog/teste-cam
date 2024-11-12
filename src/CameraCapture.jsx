@@ -87,8 +87,8 @@ const CameraCapture = () => {
     overflow: "hidden",
     margin: "0 auto",
     position: "relative",
-    border: "4px solid #3498db",
-    boxShadow: "0 0 20px rgba(52, 152, 219, 0.3)",
+    border: "4px solid #2ecc71",
+    boxShadow: "0 0 20px rgba(46, 204, 113, 0.3)",
     // background: "#000",
   };
 
@@ -109,7 +109,7 @@ const CameraCapture = () => {
     padding: "12px 24px",
     borderRadius: "25px",
     border: "none",
-    background: "#3498db",
+    background: "#2ecc71",
     color: "white",
     fontSize: "16px",
     cursor: "pointer",
